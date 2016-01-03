@@ -1,10 +1,25 @@
 use std::u8;
 
+//
+//  CRYPTO :: Now in Rust!
+//
+
+// You maybe asking yourself, "What fresh hell is this?". Well...
+// this is my poor attempt at creating a Rust module for CryptoPals
+// See http://cryptopals.com for details.
+//
+// The goal of this project is to provide a robust and fast crypto module
+// written in Rust. Some of these functions may be considered bloated
+// or inefficient, but that's ok. The first priority here is robustness, 
+// followed by speed. As a side note, this is my first Rust project.. 
+// So if you see room for improvement or poor coding practice, feel
+// free to correct it :)
+ 
 pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String> 
 {
-	if hex_input.len() <= 0
+	if hex_input.len() = 0
 	{
-		return Err("Invalid hex vector. Length of hex vector is less than or equal to zero.".to_string());
+		return Err("Input hex vector is invalid. Length of hex vector is zero.".to_string());
 	}
 
 	let mut hex_vec: Vec<u8> = hex_input;
@@ -14,11 +29,13 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 	let base64_lookup: Vec<u8> 
 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".to_string().into_bytes();
 
+	// Since the input hex vector is immutable, we create our own
+	// local hex input vector, and add zero padding if necessary
 	let hex_str_rmdr = hex_vec.len() % 3;
 
 	if hex_str_rmdr == 0
 	{
-		// No need to modify the hex input
+		// No need to add zero padding the hex input
 	}
 	else if hex_str_rmdr == 1
 	{
@@ -31,9 +48,10 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 	}
 	else 
 	{
-	    return Err("Invalid hex vector. Odd remainder, how did you get this error??".to_string());
+	    return Err("Input hex vector is invalid. Remainder fault, how did you get this error??".to_string());
 	}
 
+	
 	let hex_str_len = hex_vec.len();
 
 	let mut hex_char: Vec<u8>;
