@@ -38,8 +38,7 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 		0 => { /* No need to add zero padding the hex input */ },
 		1 => { hex_vec.push(0 as u8); hex_vec.push(0 as u8); },
 		2 => { hex_vec.push(0 as u8)},
-		_ => {
-				return Err("Input hex vector is invalid. Remainder fault, how did you get this error??".to_string());
+		_ => { return Err("Input hex vector is invalid. Remainder fault, how did you get this error??".to_string());
 			 }
 	}
 
@@ -93,8 +92,7 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 						base64_output.push(base64_lookup[base64_c as usize]);
 						base64_output.push('=' as u8);
 					 },
-				_ => {
-			    		return Err("Invalid hex string. Odd remainder, how did you get this error??".to_string());
+				_ => {	return Err("Invalid hex string. Odd remainder, how did you get this error??".to_string());
 					 }
 			} 
 		}
