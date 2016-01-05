@@ -17,7 +17,7 @@ use std::u8;
  
 pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String> 
 {
-	if hex_input.len() = 0
+	if hex_input.len() == 0
 	{
 		return Err("Input hex vector is invalid. Length of hex vector is zero.".to_string());
 	}
@@ -33,25 +33,16 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 	// local hex input vector, and add zero padding if necessary
 	let hex_str_rmdr = hex_vec.len() % 3;
 
-	if hex_str_rmdr == 0
+	match hex_str_rmdr
 	{
-		// No need to add zero padding the hex input
-	}
-	else if hex_str_rmdr == 1
-	{
-	    hex_vec.push(0 as u8);
-	    hex_vec.push(0 as u8);
-	}
-	else if hex_str_rmdr == 2
-	{
-		hex_vec.push(0 as u8);
-	}
-	else 
-	{
-	    return Err("Input hex vector is invalid. Remainder fault, how did you get this error??".to_string());
+		0 => { /* No need to add zero padding the hex input */ },
+		1 => { hex_vec.push(0 as u8); hex_vec.push(0 as u8); },
+		2 => { hex_vec.push(0 as u8)},
+		_ => {
+				return Err("Input hex vector is invalid. Remainder fault, how did you get this error??".to_string());
+			 }
 	}
 
-	
 	let hex_str_len = hex_vec.len();
 
 	let mut hex_char: Vec<u8>;
@@ -82,31 +73,30 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 		}
 		else
 		{
-			if hex_str_rmdr == 0
+			match hex_str_rmdr
 			{
-				base64_output.push(base64_lookup[base64_a as usize]);
-				base64_output.push(base64_lookup[base64_b as usize]);
-				base64_output.push(base64_lookup[base64_c as usize]);
-				base64_output.push(base64_lookup[base64_d as usize]);
-			}
-			else if hex_str_rmdr == 1
-			{
-				base64_output.push(base64_lookup[base64_a as usize]);
-				base64_output.push(base64_lookup[base64_b as usize]);
-				base64_output.push('=' as u8);
-				base64_output.push('=' as u8);
-			}
-			else if hex_str_rmdr == 2
-			{
-				base64_output.push(base64_lookup[base64_a as usize]);
-				base64_output.push(base64_lookup[base64_b as usize]);
-				base64_output.push(base64_lookup[base64_c as usize]);
-				base64_output.push('=' as u8);
-			}
-			else 
-			{
-			    return Err("Invalid hex string. Odd remainder, how did you get this error??".to_string());
-			}  
+				0 => {
+						base64_output.push(base64_lookup[base64_a as usize]);
+						base64_output.push(base64_lookup[base64_b as usize]);
+						base64_output.push(base64_lookup[base64_c as usize]);
+						base64_output.push(base64_lookup[base64_d as usize]);
+					 },
+				1 => {
+						base64_output.push(base64_lookup[base64_a as usize]);
+						base64_output.push(base64_lookup[base64_b as usize]);
+						base64_output.push('=' as u8);
+						base64_output.push('=' as u8);
+					 },
+				2 => {
+						base64_output.push(base64_lookup[base64_a as usize]);
+						base64_output.push(base64_lookup[base64_b as usize]);
+						base64_output.push(base64_lookup[base64_c as usize]);
+						base64_output.push('=' as u8);
+					 },
+				_ => {
+			    		return Err("Invalid hex string. Odd remainder, how did you get this error??".to_string());
+					 }
+			} 
 		}
 	}
 
