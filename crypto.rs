@@ -14,7 +14,99 @@ use std::u8;
 // followed by speed. As a side note, this is my first Rust project.. 
 // So if you see room for improvement or poor coding practice, feel
 // free to correct it :)
- 
+
+pub fn hex_string_to_bytes(hex_string: String) -> Result<Vec<u8>, String>
+{
+	if hex_string.len() <= 0 
+	{
+		return Err("Invalid hex vector. Length of hex vector is less than or equal to zero.".to_string());
+	}
+
+	let hex_chars: Vec<char> = hex_string.chars().collect();
+
+	let mut hex_words: Vec<u8> = vec![];
+
+	let mut hex_bytes: Vec<u8> = vec![];
+
+	if hex_chars.len() % 2 == 1
+	{
+		hex_words.push(0);
+	}
+
+	for i in 0..hex_chars.len()
+	{
+		let hex_ch = hex_chars[i].to_string();
+		let n: u8 = u8::from_str_radix(&hex_ch, 16).unwrap();
+		hex_words.push(n as u8);
+	}
+
+	for i in 0..hex_words.len()/2
+	{
+		hex_bytes.push(((hex_words[2*i] << 4) | hex_words[2*i+1]) as u8);
+	}
+
+	Ok(hex_bytes)
+}
+
+
+pub fn bytes_to_hex_string(bytes_input: Vec<u8>) -> Result<String, String>
+{
+	if bytes_input.len() <= 0 
+	{
+		return Err("Invalid input vector. Length of byte vector is less than or equal to zero.".to_string());
+	}
+
+	let mut output_string: String = String::new();
+
+	for bytes_element in bytes_input.iter()
+	{
+		match (bytes_element & 0xF0) >> 4
+		{
+			0 => output_string.push_str("0"),
+			1 => output_string.push_str("1"),
+			2 => output_string.push_str("2"),
+			3 => output_string.push_str("3"),
+			4 => output_string.push_str("4"),
+			5 => output_string.push_str("5"),
+			6 => output_string.push_str("6"),
+			7 => output_string.push_str("7"),
+			8 => output_string.push_str("8"),
+			9 => output_string.push_str("9"),
+			10 => output_string.push_str("A"),
+			11 => output_string.push_str("B"),
+			12 => output_string.push_str("C"),
+			13 => output_string.push_str("D"),
+			14 => output_string.push_str("E"),
+			15 => output_string.push_str("F"),
+			_ => { }
+		}
+
+		match bytes_element & 0x0F
+		{
+			0 => output_string.push_str("0"),
+			1 => output_string.push_str("1"),
+			2 => output_string.push_str("2"),
+			3 => output_string.push_str("3"),
+			4 => output_string.push_str("4"),
+			5 => output_string.push_str("5"),
+			6 => output_string.push_str("6"),
+			7 => output_string.push_str("7"),
+			8 => output_string.push_str("8"),
+			9 => output_string.push_str("9"),
+			10 => output_string.push_str("A"),
+			11 => output_string.push_str("B"),
+			12 => output_string.push_str("C"),
+			13 => output_string.push_str("D"),
+			14 => output_string.push_str("E"),
+			15 => output_string.push_str("F"),
+			_ => { }
+		}
+	}
+
+    Ok(output_string)
+}
+
+
 pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String> 
 {
 	if hex_input.len() == 0
@@ -101,35 +193,26 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(base64_output)
 }
 
-pub fn hex_string_to_bytes(hex_string: String) -> Result<Vec<u8>, String>
+
+pub fn fixed_xor(a: Vec<u8>, b: Vec<u8>) -> Result<Vec<u8>, String>
 {
-	if hex_string.len() <= 0 
+	if a.len() != b.len()
 	{
-		return Err("Invalid hex vector. Length of hex vector is less than or equal to zero.".to_string());
+		return Err("Input buffers are not the same length.".to_string());
 	}
 
-	let hex_chars: Vec<char> = hex_string.chars().collect();
-
-	let mut hex_words: Vec<u8> = vec![];
-
-	let mut hex_bytes: Vec<u8> = vec![];
-
-	if hex_chars.len() % 2 == 1
+	if a.len() == 0
 	{
-		hex_words.push(0);
+		return Err("Input buffers are zero.".to_string());
 	}
 
-	for i in 0..hex_chars.len()
+	let mut c: Vec<u8> = vec![];
+
+	for i in 0..a.len()
 	{
-		let hex_ch = hex_chars[i].to_string();
-		let n: u8 = u8::from_str_radix(&hex_ch, 16).unwrap();
-		hex_words.push(n as u8);
+		c.push(a[i]^b[i]);
 	}
 
-	for i in 0..hex_words.len()/2
-	{
-		hex_bytes.push(((hex_words[2*i] << 4) | hex_words[2*i+1]) as u8);
-	}
-
-	Ok(hex_bytes)
+	Ok(c)
 }
+
