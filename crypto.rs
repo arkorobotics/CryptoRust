@@ -28,6 +28,7 @@ pub fn hex_string_to_bytes(hex_string: String) -> Result<Vec<u8>, String>
 
 	let mut hex_bytes: Vec<u8> = vec![];
 
+	// If the hex string is missing a leading zero, add a zero
 	if hex_chars.len() % 2 == 1
 	{
 		hex_words.push(0);
@@ -60,47 +61,8 @@ pub fn bytes_to_hex_string(bytes_input: Vec<u8>) -> Result<String, String>
 
 	for bytes_element in bytes_input.iter()
 	{
-		match (bytes_element & 0xF0) >> 4
-		{
-			0 => output_string.push_str("0"),
-			1 => output_string.push_str("1"),
-			2 => output_string.push_str("2"),
-			3 => output_string.push_str("3"),
-			4 => output_string.push_str("4"),
-			5 => output_string.push_str("5"),
-			6 => output_string.push_str("6"),
-			7 => output_string.push_str("7"),
-			8 => output_string.push_str("8"),
-			9 => output_string.push_str("9"),
-			10 => output_string.push_str("A"),
-			11 => output_string.push_str("B"),
-			12 => output_string.push_str("C"),
-			13 => output_string.push_str("D"),
-			14 => output_string.push_str("E"),
-			15 => output_string.push_str("F"),
-			_ => { }
-		}
-
-		match bytes_element & 0x0F
-		{
-			0 => output_string.push_str("0"),
-			1 => output_string.push_str("1"),
-			2 => output_string.push_str("2"),
-			3 => output_string.push_str("3"),
-			4 => output_string.push_str("4"),
-			5 => output_string.push_str("5"),
-			6 => output_string.push_str("6"),
-			7 => output_string.push_str("7"),
-			8 => output_string.push_str("8"),
-			9 => output_string.push_str("9"),
-			10 => output_string.push_str("A"),
-			11 => output_string.push_str("B"),
-			12 => output_string.push_str("C"),
-			13 => output_string.push_str("D"),
-			14 => output_string.push_str("E"),
-			15 => output_string.push_str("F"),
-			_ => { }
-		}
+		output_string.push_str(&format!("{:X}", (bytes_element & 0xF0) >> 4));
+		output_string.push_str(&format!("{:X}", bytes_element & 0x0F));
 	}
 
     Ok(output_string)
