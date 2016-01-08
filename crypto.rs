@@ -15,6 +15,7 @@ use std::u8;
 // So if you see room for improvement or poor coding practice, feel
 // free to correct it :)
 
+#[allow(dead_code)]
 pub fn hex_string_to_bytes(hex_string: String) -> Result<Vec<u8>, String>
 {
 	if hex_string.len() <= 0 
@@ -49,7 +50,7 @@ pub fn hex_string_to_bytes(hex_string: String) -> Result<Vec<u8>, String>
 	Ok(hex_bytes)
 }
 
-
+#[allow(dead_code)]
 pub fn bytes_to_hex_string(bytes_input: Vec<u8>) -> Result<String, String>
 {
 	if bytes_input.len() <= 0 
@@ -68,7 +69,16 @@ pub fn bytes_to_hex_string(bytes_input: Vec<u8>) -> Result<String, String>
     Ok(output_string)
 }
 
+#[allow(dead_code)]
+fn print_vec(v: Vec<u8>) 
+{
+    for i in v.iter() 
+    {
+        print!("[{}], ", i);
+    }
+}
 
+#[allow(dead_code)]
 pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String> 
 {
 	if hex_input.len() == 0
@@ -155,7 +165,7 @@ pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(base64_output)
 }
 
-
+#[allow(dead_code)]
 pub fn fixed_xor(a: Vec<u8>, b: Vec<u8>) -> Result<Vec<u8>, String>
 {
 	if a.len() != b.len()
@@ -178,6 +188,7 @@ pub fn fixed_xor(a: Vec<u8>, b: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(c)
 }
 
+#[allow(dead_code)]
 pub fn frequency_u8(a: Vec<u8>) -> Result<Vec<u8>, String>
 {
 	if a.len() == 0
@@ -195,6 +206,7 @@ pub fn frequency_u8(a: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(b)
 }
 
+#[allow(dead_code)]
 pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 {
 	let a_len = a.len();
@@ -209,13 +221,11 @@ pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 	let mut best: f32 = 0.000;
 	let mut single_byte: u8 = 0;
 
-	let mut single_byte_vec: Vec<u8> = Vec::with_capacity(a_len);
-
 	for c in 1..255
 	{
-		single_byte_vec = generate_single_byte_vec(c, a_len).unwrap();
+		let single_byte_vec = generate_single_byte_vec(c, a_len).unwrap();
 
-		let mut encoded_vec: Vec<u8> = fixed_xor(a.clone(),single_byte_vec).unwrap();
+		let encoded_vec = fixed_xor(a.clone(),single_byte_vec).unwrap();
 
 		for i in 0..encoded_vec.len()
 		{
@@ -279,6 +289,7 @@ pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 	Ok(single_byte)
 }
 
+#[allow(dead_code)]
 pub fn generate_single_byte_vec(single_byte: u8, length: usize) -> Result<Vec<u8>, String>
 {
 	if length == 0
@@ -288,7 +299,7 @@ pub fn generate_single_byte_vec(single_byte: u8, length: usize) -> Result<Vec<u8
 
 	let mut single_byte_vec: Vec<u8> = vec![];
 
-	for i in 0..length
+	for _ in 0..length
 	{
 		single_byte_vec.push(single_byte);
 	}

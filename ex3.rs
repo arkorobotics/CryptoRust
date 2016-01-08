@@ -1,12 +1,6 @@
 use std::str;
 mod crypto;
 
-fn print_vec(v: Vec<u8>) {
-    for i in v.iter() {
-        print!("[{}], ", i)
-    }
-}
-
 fn main() 
 {	
 	let hex_string = String::from("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736");
