@@ -195,23 +195,103 @@ pub fn frequency_u8(a: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(b)
 }
 
-pub fn best_score_u8(a: Vec<u8>) -> Result<u8, String>
+pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 {
-	if a.len() == 0
+	let a_len = a.len();
+
+	if a_len == 0
 	{
 		return Err("Input buffer has a length of zero.".to_string());
 	}
 
 	// Initialize to null, as zero can never be the best score
-	let mut best: u8 = 0;
+	let mut score: f32 = 0.000;
+	let mut best: f32 = 0.000;
+	let mut single_byte: u8 = 0;
 
-	for i in 1..255
+	let mut single_byte_vec: Vec<u8> = Vec::with_capacity(a_len);
+
+	for c in 1..255
 	{
-		if a[i] > best
+		single_byte_vec = generate_single_byte_vec(c, a_len).unwrap();
+
+		let mut encoded_vec: Vec<u8> = fixed_xor(a.clone(),single_byte_vec).unwrap();
+
+		for i in 0..encoded_vec.len()
 		{
-			best = i as u8;
+			match encoded_vec[i] as char
+			{
+			    'E' | 'e' => score += 13.0001,
+			    'T' | 't' => score += 9.056,
+			    'A' | 'a' => score += 8.167,
+			    'O' | 'o' => score += 7.507,
+			    'I' | 'i' => score += 6.966,
+			    'N' | 'n' => score += 6.749,
+			    'S' | 's' => score += 6.327,
+			    'H' | 'h' => score += 6.094,
+			    'R' | 'r' => score += 5.987,
+			    'D' | 'd' => score += 4.253,
+			    'L' | 'l' => score += 4.025,
+			    'C' | 'c' => score += 2.782,
+			    'U' | 'u' => score += 2.758,
+			    'M' | 'm' => score += 2.406,
+			    'W' | 'w' => score += 2.360,
+			    'F' | 'f' => score += 2.228,
+			    'G' | 'g' => score += 2.015,
+			    'Y' | 'y' => score += 1.974,
+			    'P' | 'p' => score += 1.929,
+			    'B' | 'b' => score += 1.492,
+			    'V' | 'v' => score += 0.978,
+			    'K' | 'k' => score += 0.772,
+			    'J' | 'j' => score += 0.153,
+			    'X' | 'x' => score += 0.150,
+			    'Q' | 'q' => score += 0.095,
+			    'Z' | 'z' => score += 0.074,
+			    ' ' => score += 13.1,
+			    '0' => score += 8.4,
+			    '1' => score += 8.4,
+			    '2' => score += 8.4,
+			    '3' => score += 8.4,
+			    '4' => score += 8.4,
+			    '5' => score += 8.4,
+			    '6' => score += 8.4,
+			    '7' => score += 8.4,
+			    '8' => score += 8.4,
+			    '9' => score += 8.4,
+			    '\'' => score += 8.4,
+			    '"' => score += 8.4,
+			    '.' => score += 8.4,
+			    ',' => score += 8.4,
+			    '!' => score += 8.4,
+			    '?' => score += 8.4,
+			    _ => score += 0.000
+			}
 		}
+
+		if score > best
+		{
+			single_byte = c;
+			best = score;
+		}
+		score = 0.000;
 	}
 
-	Ok(best)
+	Ok(single_byte)
+}
+
+pub fn generate_single_byte_vec(single_byte: u8, length: usize) -> Result<Vec<u8>, String>
+{
+	if length == 0
+	{
+		return Err("Length is zero.".to_string());
+	}
+
+	let mut single_byte_vec: Vec<u8> = vec![];
+
+	for i in 0..length
+	{
+		single_byte_vec.push(single_byte);
+	}
+
+	Ok(single_byte_vec)
 }

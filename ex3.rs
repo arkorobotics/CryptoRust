@@ -15,20 +15,14 @@ fn main()
 
 	let encoded: Vec<u8> = crypto::hex_string_to_bytes(hex_string).unwrap();
 	
-	let encoded_freq: Vec<u8> = crypto::frequency_u8(encoded.clone()).unwrap();
-
-	let best_score: u8 = crypto::best_score_u8(encoded_freq).unwrap();
-
-	println!("{}", best_score);
-
-	let key = String::from("58585858585858585858585858585858585858585858585858585858585858585858");
+	let single_byte: u8 = crypto::find_single_byte_xor(encoded.clone()).unwrap();
 	
-	let key_vec: Vec<u8> = crypto::hex_string_to_bytes(key).unwrap();
+	let single_byte_vec: Vec<u8> = crypto::generate_single_byte_vec(single_byte,encoded.len()).unwrap();
 
-	let output_byte: Vec<u8> = crypto::fixed_xor(encoded,key_vec).unwrap();
-		
-	let sparkle_heart = str::from_utf8(&output_byte).unwrap();
+	let output_byte: Vec<u8> = crypto::fixed_xor(encoded.clone(),single_byte_vec.clone()).unwrap();
 
-	println!("{}", sparkle_heart);
+	let decoded = str::from_utf8(&output_byte).unwrap();
+
+	println!("Decoded String: {}", decoded);
 }
 
