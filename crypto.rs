@@ -165,7 +165,7 @@ pub fn fixed_xor(a: Vec<u8>, b: Vec<u8>) -> Result<Vec<u8>, String>
 
 	if a.len() == 0
 	{
-		return Err("Input buffers are zero.".to_string());
+		return Err("Input buffers have a length of zero.".to_string());
 	}
 
 	let mut c: Vec<u8> = vec![];
@@ -178,3 +178,40 @@ pub fn fixed_xor(a: Vec<u8>, b: Vec<u8>) -> Result<Vec<u8>, String>
 	Ok(c)
 }
 
+pub fn frequency_u8(a: Vec<u8>) -> Result<Vec<u8>, String>
+{
+	if a.len() == 0
+	{
+		return Err("Input buffer has a length of zero.".to_string());
+	}
+
+	let mut b: Vec<u8> = vec![0; 256];
+
+	for i in 0..a.len()
+	{
+		b[a[i] as usize] += 1;
+	}
+
+	Ok(b)
+}
+
+pub fn best_score_u8(a: Vec<u8>) -> Result<u8, String>
+{
+	if a.len() == 0
+	{
+		return Err("Input buffer has a length of zero.".to_string());
+	}
+
+	// Initialize to null, as zero can never be the best score
+	let mut best: u8 = 0;
+
+	for i in 1..255
+	{
+		if a[i] > best
+		{
+			best = i as u8;
+		}
+	}
+
+	Ok(best)
+}
