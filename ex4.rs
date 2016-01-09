@@ -8,6 +8,7 @@ fn main()
 	let file = File::open("ex4.txt").unwrap();
 
 	let mut best_score: f32 = 0.000;
+	let mut best_decoded: String = String::new();
 
     for line in BufReader::new(file).lines() 
     {
@@ -29,8 +30,9 @@ fn main()
 
 		if score > best_score
 		{
+			best_decoded = decoded.to_string();
 			best_score = score;
-			println!("Decoded String: {}", decoded);
 		}
     }
+    println!("{}", best_decoded);
 }
