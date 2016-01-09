@@ -70,7 +70,7 @@ pub fn bytes_to_hex_string(bytes_input: Vec<u8>) -> Result<String, String>
 }
 
 #[allow(dead_code)]
-fn print_vec(v: Vec<u8>) 
+pub fn print_vec(v: Vec<u8>) 
 {
     for i in v.iter() 
     {
@@ -207,7 +207,7 @@ pub fn frequency_u8(a: Vec<u8>) -> Result<Vec<u8>, String>
 }
 
 #[allow(dead_code)]
-pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
+pub fn find_single_byte_xor(a: Vec<u8>) -> Result<(u8,f32), String>
 {
 	let a_len = a.len();
 
@@ -231,7 +231,7 @@ pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 		{
 			match encoded_vec[i] as char
 			{
-			    'E' | 'e' => score += 13.0001,
+			    'E' | 'e' => score += 12.702,
 			    'T' | 't' => score += 9.056,
 			    'A' | 'a' => score += 8.167,
 			    'O' | 'o' => score += 7.507,
@@ -286,7 +286,7 @@ pub fn find_single_byte_xor(a: Vec<u8>) -> Result<u8, String>
 		score = 0.000;
 	}
 
-	Ok(single_byte)
+	Ok((single_byte,best))
 }
 
 #[allow(dead_code)]

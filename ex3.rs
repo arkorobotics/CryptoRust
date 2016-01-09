@@ -9,7 +9,7 @@ fn main()
 
 	let encoded: Vec<u8> = crypto::hex_string_to_bytes(hex_string).unwrap();
 	
-	let single_byte: u8 = crypto::find_single_byte_xor(encoded.clone()).unwrap();
+	let (single_byte, _score): (u8,f32) = crypto::find_single_byte_xor(encoded.clone()).unwrap();
 	
 	let single_byte_vec: Vec<u8> = crypto::generate_single_byte_vec(single_byte,encoded.len()).unwrap();
 
@@ -19,4 +19,3 @@ fn main()
 
 	println!("Decoded String: {}", decoded);
 }
-

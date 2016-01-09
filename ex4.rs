@@ -1,0 +1,36 @@
+use std::str;
+use std::io::{BufReader,BufRead};
+use std::fs::File;
+mod crypto;
+
+fn main() 
+{	
+	let file = File::open("ex4.txt").unwrap();
+
+	let mut best_score: f32 = 0.000;
+
+    for line in BufReader::new(file).lines() 
+    {
+    	let hex_string = String::from(line.unwrap());
+	
+		//println!("Input Hex String: {}", hex_string);
+
+		let encoded: Vec<u8> = crypto::hex_string_to_bytes(hex_string).unwrap();
+		
+		let (single_byte, score): (u8,f32) = crypto::find_single_byte_xor(encoded.clone()).unwrap();
+		
+		let single_byte_vec: Vec<u8> = crypto::generate_single_byte_vec(single_byte,encoded.len()).unwrap();
+
+		let output_byte: Vec<u8> = crypto::fixed_xor(encoded.clone(),single_byte_vec.clone()).unwrap();
+
+		let decoded = unsafe {str::from_utf8_unchecked(&output_byte)};
+		
+		//println!("Decoded String: {}", decoded);
+
+		if score > best_score
+		{
+			best_score = score;
+			println!("Decoded String: {}", decoded);
+		}
+    }
+}
