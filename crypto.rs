@@ -74,7 +74,7 @@ pub fn print_vec(v: Vec<u8>)
 {
     for i in v.iter() 
     {
-        print!("[{}], ", i);
+        print!("[{:X}], ", i);
     }
 }
 
@@ -305,4 +305,32 @@ pub fn generate_single_byte_vec(single_byte: u8, length: usize) -> Result<Vec<u8
 	}
 
 	Ok(single_byte_vec)
+}
+
+#[allow(dead_code)]
+pub fn generate_repeating_byte_vec(input_vec: Vec<u8>, repeating_length: usize) -> Result<Vec<u8>, String>
+{
+	if input_vec.len() == 0
+	{
+		return Err("Input vector is zero.".to_string());
+	}
+
+	if repeating_length == 0
+	{
+		return Err("Required repeating vector length is zero.".to_string());
+	}
+
+	if input_vec.len() > repeating_length
+	{
+		return Err("Input vector is larger than the repeating vector length.".to_string());
+	}
+
+	let mut repeating_byte_vec: Vec<u8> = vec![];
+
+	for i in 0..repeating_length
+	{
+		repeating_byte_vec.push(input_vec[i%input_vec.len()]);
+	}
+
+	Ok(repeating_byte_vec)
 }

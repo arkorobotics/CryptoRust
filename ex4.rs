@@ -14,8 +14,6 @@ fn main()
     {
     	let hex_string = String::from(line.unwrap());
 	
-		//println!("Input Hex String: {}", hex_string);
-
 		let encoded: Vec<u8> = crypto::hex_string_to_bytes(hex_string).unwrap();
 		
 		let (single_byte, score): (u8,f32) = crypto::find_single_byte_xor(encoded.clone()).unwrap();
@@ -26,8 +24,6 @@ fn main()
 
 		let decoded = unsafe {str::from_utf8_unchecked(&output_byte)};
 		
-		//println!("Decoded String: {}", decoded);
-
 		if score > best_score
 		{
 			best_decoded = decoded.to_string();
