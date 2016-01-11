@@ -334,3 +334,31 @@ pub fn generate_repeating_byte_vec(input_vec: Vec<u8>, repeating_length: usize) 
 
 	Ok(repeating_byte_vec)
 }
+
+#[allow(dead_code)]
+pub fn hamming_distance(a: Vec<u8>, b: Vec<u8>) -> Result<i32, String>
+{
+	let mut hamming_distance: i32 = 0;
+
+	if a.len() != b.len()
+	{
+		return Err("Input buffers are not the same length.".to_string());
+	}
+
+	if a.len() == 0
+	{
+		return Err("Input buffers have a length of zero.".to_string());
+	}
+
+	for i in 0..(a.len()*8)
+	{
+		if (a[i/8]>>(i%8) & 0x01) ^ (b[i/8]>>(i%8) & 0x01) == 1
+		{
+			hamming_distance += 1;
+		}
+	}
+	
+	Ok(hamming_distance)
+}
+
+
