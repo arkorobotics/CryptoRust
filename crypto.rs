@@ -79,6 +79,68 @@ pub fn print_vec(v: Vec<u8>)
 }
 
 #[allow(dead_code)]
+pub fn base64_lut(input_u8: u8) -> Result<u8, String> 
+{
+	match input_u8 as char
+	{
+		'A' => {Ok(0)},'B' => {Ok(1)},'C' => {Ok(2)},'D' => {Ok(3)},'E' => {Ok(4)},
+		'F' => {Ok(5)},'G' => {Ok(6)},'H' => {Ok(7)},'I' => {Ok(8)},'J' => {Ok(9)},
+		'K' => {Ok(10)},'L' => {Ok(11)},'M' => {Ok(12)},'N' => {Ok(13)},'O' => {Ok(14)},
+		'P' => {Ok(15)},'Q' => {Ok(16)},'R' => {Ok(17)},'S' => {Ok(18)},'T' => {Ok(19)},
+		'U' => {Ok(20)},'V' => {Ok(21)},'W' => {Ok(22)},'X' => {Ok(23)},'Y' => {Ok(24)},
+		'Z' => {Ok(25)},'a' => {Ok(26)},'b' => {Ok(27)},'c' => {Ok(28)},'d' => {Ok(29)},
+		'e' => {Ok(30)},'f' => {Ok(31)},'g' => {Ok(32)},'h' => {Ok(33)},'i' => {Ok(34)},
+		'j' => {Ok(35)},'k' => {Ok(36)},'l' => {Ok(37)},'m' => {Ok(38)},'n' => {Ok(39)},
+		'o' => {Ok(40)},'p' => {Ok(41)},'q' => {Ok(42)},'r' => {Ok(43)},'s' => {Ok(44)},
+		't' => {Ok(45)},'u' => {Ok(46)},'v' => {Ok(47)},'w' => {Ok(48)},'x' => {Ok(49)},
+		'y' => {Ok(50)},'z' => {Ok(51)},'0' => {Ok(52)},'1' => {Ok(53)},'2' => {Ok(54)},
+		'3' => {Ok(55)},'4' => {Ok(56)},'5' => {Ok(57)},'6' => {Ok(58)},'7' => {Ok(59)},
+		'8' => {Ok(60)},'9' => {Ok(61)},'+' => {Ok(62)},'/' => {Ok(63)},'=' => {Ok(64)},
+		_ => {return Err("Input character out of bounds.".to_string())}
+	}
+}
+
+#[allow(dead_code)]
+pub fn base64_to_bytes(base64_input: Vec<u8>) -> Result<Vec<u8>, String> 
+{
+	if base64_input.len() == 0
+	{
+		return Err("Input vector is empty.".to_string());
+	}
+
+	if base64_input.len() % 4 != 0
+	{
+		return Err("Input vector is not a valid base64 vector. Is not divisble by 4.".to_string());
+	}
+
+	let mut byte_vec: Vec<u8> = vec![];
+
+	let mut _byte_a: u8 = 0;
+	let mut _byte_b: u8 = 0;
+	let mut _byte_c: u8 = 0;
+
+	for i in 0..(base64_input.len()/4)
+	{
+		_byte_a = (base64_lut(base64_input[4*i]).unwrap() << 2) | (base64_lut(base64_input[(4*i)+1]).unwrap() >> 4);
+		byte_vec.push(_byte_a);
+
+		if base64_lut(base64_input[(4*i)+2]).unwrap() < 64
+		{
+			_byte_b = (base64_lut(base64_input[(4*i)+1]).unwrap() << 4) | (base64_lut(base64_input[(4*i)+2]).unwrap() >> 2);
+			byte_vec.push(_byte_b);
+		}
+		
+		if base64_lut(base64_input[(4*i)+3]).unwrap() < 64
+		{
+			_byte_c = (base64_lut(base64_input[(4*i)+2]).unwrap() << 6) | base64_lut(base64_input[(4*i)+3]).unwrap();
+			byte_vec.push(_byte_c);
+		}
+	}
+
+	Ok(byte_vec)
+}
+
+#[allow(dead_code)]
 pub fn hex_to_base64(hex_input: Vec<u8>) -> Result<Vec<u8>, String> 
 {
 	if hex_input.len() == 0
@@ -360,5 +422,4 @@ pub fn hamming_distance(a: Vec<u8>, b: Vec<u8>) -> Result<i32, String>
 	
 	Ok(hamming_distance)
 }
-
 
